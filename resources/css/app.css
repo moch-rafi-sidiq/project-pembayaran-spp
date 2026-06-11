@@ -1,0 +1,140 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: #F8FAFC;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #2563EB;
+    border-radius: 4px;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 280px;
+    background: #1E293B;
+    color: white;
+    transition: all 0.3s;
+    z-index: 1000;
+}
+
+.sidebar .nav-link {
+    color: rgba(255,255,255,0.8);
+    padding: 12px 20px;
+    margin: 5px 15px;
+    border-radius: 10px;
+    transition: all 0.3s;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+    background: #2563EB;
+    color: white;
+    transform: translateX(5px);
+}
+
+.sidebar .nav-link i {
+    width: 25px;
+    margin-right: 10px;
+}
+
+.content {
+    margin-left: 280px;
+    padding: 20px;
+}
+
+.navbar-top {
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    padding: 15px 30px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: all 0.3s;
+    border-left: 4px solid;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.stat-card .icon {
+    font-size: 2.5rem;
+    opacity: 0.2;
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+}
+
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+.btn-primary {
+    background: #2563EB;
+    border: none;
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        margin-left: -280px;
+    }
+    
+    .sidebar.active {
+        margin-left: 0;
+    }
+    
+    .content {
+        margin-left: 0;
+    }
+    
+    .menu-toggle {
+        display: block;
+    }
+}
+
+.dark-mode {
+    background: #1a1a2e;
+    color: white;
+}
+
+.dark-mode .card,
+.dark-mode .stat-card,
+.dark-mode .navbar-top {
+    background: #16213e;
+    color: white;
+}
