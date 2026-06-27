@@ -28,29 +28,30 @@
     }
 </style>
 
+<!-- STATISTIK - 4 KOLOM -->
 <div class="row">
-    <div class="col-md-3 mb-3">
+    <div class="col-12 col-sm-6 col-lg-3 mb-3">
         <div class="stat-card" style="border-left-color: #2563EB;">
             <h6>Total Siswa</h6>
             <h2 class="mt-2">{{ number_format($total_siswa) }}</h2>
             <i class="fas fa-users icon"></i>
         </div>
     </div>
-    <div class="col-md-3 mb-3">
+    <div class="col-12 col-sm-6 col-lg-3 mb-3">
         <div class="stat-card" style="border-left-color: #10B981;">
             <h6>Total Pembayaran</h6>
             <h2 class="mt-2">Rp {{ number_format($total_pembayaran,0,',','.') }}</h2>
             <i class="fas fa-money-bill icon"></i>
         </div>
     </div>
-    <div class="col-md-3 mb-3">
+    <div class="col-12 col-sm-6 col-lg-3 mb-3">
         <div class="stat-card" style="border-left-color: #EF4444;">
             <h6>Tagihan Belum Lunas</h6>
             <h2 class="mt-2">{{ number_format($belum_lunas) }}</h2>
             <i class="fas fa-exclamation-triangle icon"></i>
         </div>
     </div>
-    <div class="col-md-3 mb-3">
+    <div class="col-12 col-sm-6 col-lg-3 mb-3">
         <div class="stat-card" style="border-left-color: #F59E0B;">
             <h6>Pendapatan Bulan Ini</h6>
             <h2 class="mt-2">Rp {{ number_format($pendapatan_bulan,0,',','.') }}</h2>
@@ -59,117 +60,127 @@
     </div>
 </div>
 
+<!-- GRAFIK -->
 <div class="row">
-    <div class="row">
     <div class="col-md-12">
         <div class="card">
             <div class="card-header bg-white fw-bold">
                 <i class="fas fa-chart-line me-2"></i>Grafik Pembayaran {{ date('Y') }}
             </div>
             <div class="card-body p-3">
-                <div style="position: relative; height: 350px; width: 100%;">
+                <div style="position: relative; height: 300px; width: 100%;">
                     <canvas id="paymentChart" style="display: block; width: 100%; height: 100%;"></canvas>
                 </div>
             </div>
         </div>
     </div>
 </div>
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-header bg-white fw-bold">
-                <i class="fas fa-chart-pie me-2"></i>Ringkasan
-            </div>
-            <div class="card-body text-center">
-                <h4 class="text-primary">Rp {{ number_format($pendapatan_tahun,0,',','.') }}</h4>
-                <small class="text-muted">Total Pendapatan {{ date('Y') }}</small>
-                <hr>
-                <div class="row mt-3">
-                    <div class="col-6">
-                        <h5>{{ number_format($total_siswa) }}</h5>
-                        <small>Siswa Aktif</small>
-                    </div>
-                    <div class="col-6">
-                        <h5>{{ number_format($belum_lunas) }}</h5>
-                        <small>Belum Lunas</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
+<!-- PEMBAYARAN TERBARU & RINGKASAN - 2 KOLOM -->
 <div class="row mt-3">
-    <div class="col-md-7">
-        <div class="card">
+    <!-- KOLOM KIRI: Pembayaran Terbaru -->
+    <div class="col-12 col-md-7 mb-3 mb-md-0">
+        <div class="card h-100">
             <div class="card-header bg-white fw-bold">
                 <i class="fas fa-clock me-2"></i>Pembayaran Terbaru
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr><th>Tanggal</th><th>Siswa</th><th>Jumlah</th><th>Status</th></tr>
+                    <table class="table table-hover table-striped">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Siswa</th>
+                                <th>Jumlah</th>
+                                <th>Status</th>
+                            </tr>
                         </thead>
                         <tbody>
-                            @foreach($pembayaran_terbaru as $p)
+                            @forelse($pembayaran_terbaru ?? [] as $p)
                             <tr>
                                 <td>{{ date('d/m/Y', strtotime($p->tanggal_bayar)) }}</td>
                                 <td>{{ $p->siswa->name ?? '-' }}</td>
-                                <td>Rp {{ number_format($p->jumlah,0,',','.') }}</td>
-                                <td><span class="badge bg-success">{{ $p->status }}</span></td>
+                                <td>Rp {{ number_format($p->jumlah, 0, ',', '.') }}</td>
+                                <td>
+                                    @if($p->status == 'Lunas')
+                                        <span class="badge bg-success">✓ Lunas</span>
+                                    @elseif($p->status == 'Menunggu Verifikasi')
+                                        <span class="badge bg-warning text-dark">⏳ Menunggu</span>
+                                    @else
+                                        <span class="badge bg-danger">✗ Belum Lunas</span>
+                                    @endif
+                                </td>
                             </tr>
-                            @endforeach
+                            @empty
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">Belum ada pembayaran</td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-5">
+
+    <!-- KOLOM KANAN: Ringkasan + Tagihan Jatuh Tempo -->
+    <div class="col-12 col-md-5">
+        <!-- RINGKASAN -->
+        <div class="card mb-3">
+            <div class="card-header bg-white fw-bold">
+                <i class="fas fa-chart-pie me-2"></i>Ringkasan
+            </div>
+            <div class="card-body text-center">
+                <h4 class="text-primary">Rp {{ number_format($pendapatan_tahun, 0, ',', '.') }}</h4>
+                <small class="text-muted">Total Pendapatan {{ date('Y') }}</small>
+                <hr>
+                <div class="row">
+                    <div class="col-6">
+                        <h5>{{ number_format($total_siswa) }}</h5>
+                        <small>Siswa Aktif</small>
+                    </div>
+                    <div class="col-6">
+                        <h5 class="text-danger">{{ number_format($belum_lunas) }}</h5>
+                        <small>Belum Lunas</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAGIHAN JATUH TEMPO -->
         <div class="card">
             <div class="card-header bg-white fw-bold">
                 <i class="fas fa-bell me-2"></i>Tagihan Jatuh Tempo
             </div>
             <div class="card-body">
-                @foreach($tagihan_jatuh_tempo as $tagihan)
+                @forelse($tagihan_jatuh_tempo as $tagihan)
                 <div class="alert alert-warning mb-2">
                     <strong>{{ $tagihan->siswa->name ?? '-' }}</strong><br>
                     <small>{{ $tagihan->bulan }} {{ $tagihan->tahun }}</small><br>
                     <small>Jatuh tempo: {{ date('d/m/Y', strtotime($tagihan->jatuh_tempo)) }}</small>
                 </div>
-                @endforeach
-                @if($tagihan_jatuh_tempo->count() == 0)
+                @empty
                 <div class="text-center text-muted">Tidak ada tagihan jatuh tempo</div>
-                @endif
+                @endforelse
             </div>
         </div>
     </div>
 </div>
+
 @endsection
+
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const canvas = document.getElementById('paymentChart');
     if (canvas) {
-        // **PERBAIKAN: Hapus chart yang sudah ada jika canvas sudah digunakan**
         if (canvas.chart) {
             canvas.chart.destroy();
         }
         
-        // Data dari controller
         const chartData = @json($chart_data ?? array_fill(0, 12, 0));
         
-        console.log('Data grafik:', chartData);
-        
-        // Hitung total dari chart data
-        const totalDariGrafik = chartData.reduce((a, b) => a + b, 0);
-        const totalPembayaran = {{ $total_pembayaran ?? 0 }};
-        
-        console.log('Total dari grafik: Rp ' + totalDariGrafik);
-        console.log('Total pembayaran: Rp ' + totalPembayaran);
-        
-        // **PERBAIKAN: Simpan chart instance ke canvas**
         canvas.chart = new Chart(canvas, {
             type: 'bar',
             data: {
@@ -218,3 +229,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 @endpush
+EOF

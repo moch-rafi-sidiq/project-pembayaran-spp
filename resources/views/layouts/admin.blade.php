@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title') - SIPAYU SPP System</title>
     
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -177,6 +178,51 @@
     .dark-mode .bg-white {
         background: #16213e;
     }
+
+    /* SweetAlert Custom - Global */
+.swal2-popup {
+    border-radius: 16px !important;
+    padding: 30px 25px !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15) !important;
+}
+
+.swal2-title {
+    font-size: 1.4rem !important;
+    font-weight: 700 !important;
+    color: #1E293B !important;
+}
+
+.swal2-html-container {
+    font-size: 1rem !important;
+    color: #475569 !important;
+    line-height: 1.7 !important;
+    margin-top: 8px !important;
+}
+
+.swal2-confirm {
+    padding: 10px 35px !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    min-width: 120px !important;
+}
+
+.swal2-cancel {
+    padding: 10px 35px !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    min-width: 120px !important;
+}
+
+.swal2-actions {
+    gap: 14px !important;
+    margin-top: 10px !important;
+}
+
+.swal2-icon {
+    margin-bottom: 10px !important;
+}
 </style>
 </style>
 
@@ -265,13 +311,6 @@
             </div>
         </div>
 
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
-
         @if(session('error'))
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 {{ session('error') }}
@@ -283,11 +322,8 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    @stack('scripts')
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @stack('scripts')
 
@@ -303,6 +339,30 @@ function toggleDarkMode() {
 
 if(localStorage.getItem('darkMode') === 'true') {
     document.body.classList.add('dark-mode');
+}
+</script>
+<script>
+// Global function untuk SweetAlert Delete
+function confirmDelete(url, name, callback) {
+    Swal.fire({
+        title: 'Hapus Data?',
+        html: `Yakin ingin menghapus <strong>${name}</strong>?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Ya, Hapus!',
+        cancelButtonText: 'Batal',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            if (callback) {
+                callback();
+            } else {
+                window.location.href = url;
+            }
+        }
+    });
 }
 </script>
 </body>

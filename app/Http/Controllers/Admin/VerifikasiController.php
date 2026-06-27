@@ -28,7 +28,7 @@ class VerifikasiController extends Controller
             'verifikasi_by' => Auth::user()->id,
             'verifikasi_at' => now()
         ]);
-        
+
         // Update status tagihan
         $tagihan = Tagihan::where('siswa_id', $pembayaran->siswa_id)
             ->where('bulan', $pembayaran->bulan)
@@ -38,8 +38,16 @@ class VerifikasiController extends Controller
         if ($tagihan) {
             $tagihan->update(['status' => 'Lunas']);
         }
+
+        Mail::raw("Halo {$siswa->name}, pembayaran SPP bulan {$pembayaran->bulan} {$pembayaran->tahun} telah diverifikasi! Status: LUNAS.", function ($message) use ($siswa) {
+        $message->to($siswa->email)
+                ->subject('✅ Pembayaran SPP Diverifikasi');
+    });
+    
+    return redirect()->back()->with('success', 'Pembayaran berhasil diverifikasi & notifikasi sudah dikirim.');
         
         return redirect()->back()->with('success', 'Pembayaran berhasil diverifikasi');
+        
     }
     
     public function reject($id)
@@ -54,3 +62,4 @@ class VerifikasiController extends Controller
         return redirect()->back()->with('success', 'Pembayaran ditolak');
     }
 }
+

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Pembayaran;
 use App\Models\User;
 use App\Models\Spp;
+use App\Models\Kelas;
+use App\Models\Jurusan;
 use Illuminate\Http\Request;
 
 class PembayaranController extends Controller
@@ -20,7 +22,9 @@ class PembayaranController extends Controller
     {
         $siswa = User::where('role', 'siswa')->get();
         $spp = Spp::all();
-        return view('admin.pembayaran.create', compact('siswa', 'spp'));
+        $kelas = Kelas::all();      
+        $jurusan = Jurusan::all();  
+        return view('admin.pembayaran.create', compact('siswa', 'spp', 'kelas', 'jurusan'));
     }
     
     public function store(Request $request)

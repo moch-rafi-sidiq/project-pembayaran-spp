@@ -51,6 +51,11 @@
                     <input type="text" name="tahun_ajaran" class="form-control" value="{{ $siswa->tahun_ajaran }}" required>
                 </div>
                 <div class="col-md-6 mb-3">
+    <label class="form-label">Email <span class="text-danger">*</span></label>
+    <input type="email" name="email" class="form-control" value="{{ $siswa->email }}" required>
+    <small class="text-muted">Digunakan untuk notifikasi tagihan jatuh tempo</small>
+</div>
+                <div class="col-md-6 mb-3">
                     <label class="form-label">No Telepon</label>
                     <input type="text" name="no_telepon" class="form-control" value="{{ $siswa->no_telepon }}">
                 </div>

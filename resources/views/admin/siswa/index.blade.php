@@ -83,25 +83,16 @@
 @push('scripts')
 <script>
     document.querySelectorAll('.delete-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const id = this.dataset.id;
-            const name = this.dataset.name;
-            Swal.fire({
-                title: 'Hapus Siswa?',
-                html: `Yakin ingin menghapus <strong>${name}</strong>?`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                confirmButtonText: 'Ya, Hapus!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const form = document.getElementById('deleteForm');
-                    form.action = `/admin/siswa/${id}`;
-                    form.submit();
-                }
-            });
+    btn.addEventListener('click', function() {
+        const id = this.dataset.id;
+        const name = this.dataset.name;
+        confirmDelete(`/admin/siswa/${id}`, name, function() {
+            const deleteForm = document.getElementById('deleteForm');
+            deleteForm.action = `/admin/siswa/${id}`;
+            deleteForm.submit();
         });
     });
+});
 </script>
 @endpush
 @endsection

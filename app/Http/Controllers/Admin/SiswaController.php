@@ -101,6 +101,7 @@ class SiswaController extends Controller
         $siswa->update([
             'nis' => $request->nis,
             'name' => $request->name,
+            'email' => $request->email,
             'username' => $request->nis,
             'jenis_kelamin' => $request->jenis_kelamin,
             'kelas_id' => $request->kelas_id,
